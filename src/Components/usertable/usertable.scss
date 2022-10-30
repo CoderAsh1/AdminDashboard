@@ -1,0 +1,16 @@
+#delete {
+  color: red;
+  margin-left: 10px;
+}
+
+table {
+  margin-top: 1rem;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+table tr td,
+th {
+  border-bottom: 1px solid rgb(223, 223, 223);
+  padding: 1rem 0;
+}
