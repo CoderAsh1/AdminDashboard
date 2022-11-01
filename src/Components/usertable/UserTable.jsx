@@ -2,7 +2,7 @@ import "./usertable.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 
-const UserTable = ({ users, setUsers }) => {
+const UserTable = ({ users, setUsers, currentUsers }) => {
   const handleCheckChanged = (e) => {
     let { name, checked } = e.target;
     if (name === "all") {
@@ -16,8 +16,12 @@ const UserTable = ({ users, setUsers }) => {
     }
   };
 
-  function handleDelete() {
+  function handleSelectDelete() {
     let temp = users.filter((user) => user?.isChecked !== true);
+    setUsers(temp);
+  }
+  function handleDelete(e) {
+    let temp = users.filter((user) => user.name !== e.target.id);
     setUsers(temp);
   }
 
@@ -44,7 +48,7 @@ const UserTable = ({ users, setUsers }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, i) => (
+          {currentUsers.map((user, i) => (
             <tr key={i}>
               <td>
                 <input
@@ -56,17 +60,21 @@ const UserTable = ({ users, setUsers }) => {
                 />
               </td>
               <td width="20%">{user.name}</td>
-              <td width="20%">{user.name}</td>
+              <td width="20%">{user.email}</td>
               <td width="20%">{user.role}</td>
               <td>
-                <FiEdit id="edit" />
-                <AiOutlineDelete id="delete" />
+                <FiEdit className="edit" />
+                <AiOutlineDelete
+                  className="delete"
+                  id={user.name}
+                  onClick={handleDelete}
+                />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={handleDelete} className="deleteBtn">
+      <button onClick={handleSelectDelete} className="deleteBtn">
         Delete Selected
       </button>
     </>

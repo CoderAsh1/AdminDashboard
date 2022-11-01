@@ -18,6 +18,11 @@
   }
 }
 #gray {
-  background: rgb(207, 207, 207);
-  border: 1px solid rgb(0, 110, 255);
+  background: none;
+  color: rgb(0, 110, 255);
+  border: 2px solid rgb(0, 110, 255);
+}
+#disable {
+  background: rgb(209, 209, 209);
+  cursor: auto;
 }

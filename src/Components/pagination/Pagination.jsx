@@ -6,37 +6,58 @@ import {
 } from "react-icons/fi";
 import "./pagination.scss";
 
-const Pagination = ({
-  users,
-  usersPerPage,
-  handlePage,
-  currentPage,
-  setCurrentPage,
-}) => {
+const Pagination = ({ users, usersPerPage, currentPage, setCurrentPage }) => {
   let totalPages = Math.ceil(users.length / usersPerPage);
   let pages = [];
   for (let i = 1; i <= totalPages; i++) {
     pages.push(i);
   }
   function handlePage(e) {
-    setCurrentPage(e.target.innerText);
+    setCurrentPage(parseInt(e.target.innerText));
   }
-  console.log(currentPage);
+  function handleFirst() {
+    setCurrentPage(1);
+  }
+  function handlePrev() {
+    currentPage > 1 && setCurrentPage(currentPage - 1);
+  }
+  function handleNext() {
+    currentPage < totalPages && setCurrentPage(currentPage + 1);
+  }
+  function handleLast() {
+    setCurrentPage(totalPages);
+  }
   return (
     <div className="pagination">
-      <FiChevronsLeft className="extra" />
-      <FiChevronLeft className="extra" />
+      <FiChevronsLeft
+        className="extra"
+        onClick={handleFirst}
+        id={currentPage === 1 ? "disable" : ""}
+      />
+      <FiChevronLeft
+        className="extra"
+        onClick={handlePrev}
+        id={currentPage === 1 ? "disable" : ""}
+      />
       {pages.map((page) => (
         <button
           key={page}
           onClick={handlePage}
-          id={currentPage === page ? "gray" : ""}
+          id={currentPage === page ? "gray" : " "}
         >
-          {page}{" "}
+          {page}
         </button>
       ))}
-      <FiChevronRight className="extra" />
-      <FiChevronsRight className="extra" />
+      <FiChevronRight
+        className="extra"
+        onClick={handleNext}
+        id={currentPage === totalPages ? "disable" : ""}
+      />
+      <FiChevronsRight
+        className="extra"
+        onClick={handleLast}
+        id={currentPage === totalPages ? "disable" : ""}
+      />
     </div>
   );
 };

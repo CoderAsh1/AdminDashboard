@@ -9,6 +9,7 @@ function App() {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   // const [currentUsers, setCurrentUsers] = useState([]);
+  const [temp, setTemp] = useState([]);
   const [usersPerPage] = useState(10);
 
   async function fetchData() {
@@ -16,11 +17,23 @@ function App() {
       "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
     );
     setUsers(result.data);
-    console.log(result.data);
+    setTemp(result.data);
   }
 
   function handleChange(e) {
     setValue(e.target.value);
+    if (e.target.value === "") {
+      setUsers(temp);
+    } else {
+      let tempData = temp.filter(
+        (user) =>
+          user.name.toLowerCase().startsWith(e.target.value.toLowerCase())
+        // &&
+        // user.role.toLowerCase().startsWith(e.target.value.toLowerCase()) &&
+        // user.email.toLowerCase().startsWith(e.target.value.toLowerCase())
+      );
+      setUsers(tempData);
+    }
   }
 
   let indexOfLastUser = currentPage * usersPerPage;
@@ -36,11 +49,16 @@ function App() {
     <div className="App">
       <input
         type="text"
+        placeholder="search by name,email or role"
         value={value}
         onChange={handleChange}
         className="textInput"
       />
-      <UserTable users={currentUsers} setUsers={setUsers} />
+      <UserTable
+        users={users}
+        currentUsers={currentUsers}
+        setUsers={setUsers}
+      />
       <Pagination
         currentUsers={currentUsers}
         users={users}
