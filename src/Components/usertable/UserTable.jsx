@@ -29,7 +29,7 @@ const UserTable = ({ users, setUsers }) => {
             <th>
               <input
                 type="checkbox"
-                id="checkbox"
+                className="checkbox"
                 name="all"
                 checked={
                   users.filter((user) => user?.isChecked !== true).length < 1
@@ -49,14 +49,15 @@ const UserTable = ({ users, setUsers }) => {
               <td>
                 <input
                   type="checkbox"
+                  className="checkbox"
                   checked={user?.isChecked || false}
                   onChange={handleCheckChanged}
                   name={user.name}
                 />
               </td>
-              <td>{user.name}</td>
-              <td>{user.name}</td>
-              <td>{user.role}</td>
+              <td width="20%">{user.name}</td>
+              <td width="20%">{user.name}</td>
+              <td width="20%">{user.role}</td>
               <td>
                 <FiEdit id="edit" />
                 <AiOutlineDelete id="delete" />
@@ -65,7 +66,9 @@ const UserTable = ({ users, setUsers }) => {
           ))}
         </tbody>
       </table>
-      <button onClick={handleDelete}>Delete</button>
+      <button onClick={handleDelete} className="deleteBtn">
+        Delete Selected
+      </button>
     </>
   );
 };

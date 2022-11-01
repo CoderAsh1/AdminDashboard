@@ -1,0 +1,23 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: fixed;
+  width: 80%;
+  bottom: 1rem;
+  button,
+  .extra {
+    height: 2rem;
+    width: 2rem;
+    border: none;
+    background: rgb(0, 110, 255);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}
+#gray {
+  background: rgb(207, 207, 207);
+  border: 1px solid rgb(0, 110, 255);
+}

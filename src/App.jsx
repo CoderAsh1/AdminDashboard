@@ -7,19 +7,29 @@ import UserTable from "./Components/usertable/UserTable";
 function App() {
   const [users, setUsers] = useState([]);
   const [value, setValue] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentUsers, setCurrentUsers] = useState([]);
+  const [usersPerPage] = useState(10);
+
   async function fetchData() {
     let result = await axios.get(
       "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
     );
-    // result.data.map((data) => (data.isChecked = false));
     setUsers(result.data);
     console.log(result.data);
   }
+
   function handleChange(e) {
     setValue(e.target.value);
   }
+
+  let indexOfLastUser = currentPage * usersPerPage;
+  let indexOfFirstUser = indexOfLastUser - usersPerPage;
+  let currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
   useEffect(() => {
     fetchData();
+    // setCurrentUsers(temp);
   }, []);
 
   return (
@@ -30,8 +40,14 @@ function App() {
         onChange={handleChange}
         className="textInput"
       />
-      <UserTable users={users} setUsers={setUsers} />
-      <Pagination />
+      <UserTable users={currentUsers} setUsers={setUsers} />
+      <Pagination
+        currentUsers={currentUsers}
+        users={users}
+        usersPerPage={usersPerPage}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
     </div>
   );
 }
