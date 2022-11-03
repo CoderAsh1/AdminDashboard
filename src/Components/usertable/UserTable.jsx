@@ -9,20 +9,29 @@ const UserTable = ({
   indexOfFirstUser,
   indexOfLastUser,
 }) => {
+  //control the checkbox
   const handleCheckChanged = (e) => {
-    let checkBox = document.querySelector("check");
-    let { name, checked } = e.target;
+    const rows = document.getElementsByClassName("rows");
+    let { name, checked, id } = e.target;
+    console.log(id);
     if (name === "all") {
       let temp = currentUsers.map(
         (user) => (user = { ...user, isChecked: checked })
       );
       users.splice(indexOfFirstUser, indexOfLastUser);
       setUsers((prev) => [...temp.concat(prev)]);
+      for (let v in rows) {
+        if (checked === true) rows[v].classList.add("gray");
+        else rows[v].classList.remove("gray");
+      }
     } else {
       let temp = users.map((user) =>
         name === user.name ? { ...user, isChecked: checked } : user
       );
       setUsers(temp);
+    }
+    for (let v in rows) {
+      if (id === rows[v].id) rows[v].classList.toggle("gray");
     }
   };
 
@@ -36,13 +45,27 @@ const UserTable = ({
   }
   function handleEdit(e) {
     console.log(e.target.id);
+    let x = prompt("enter the name");
+    let y = prompt("enter email");
+    let z = prompt("enter role");
+    let temp = users.map((user) =>
+      user.name === e.target.id
+        ? {
+            ...user,
+            name: x ? x : user.name,
+            email: y ? y : user.email,
+            role: z ? z : user.role,
+          }
+        : user
+    );
+    setUsers(temp);
   }
 
   return (
     <>
       <table>
         <thead>
-          <tr>
+          <tr className="rows">
             <th>
               <input
                 type="checkbox"
@@ -63,11 +86,11 @@ const UserTable = ({
         </thead>
         <tbody>
           {currentUsers.map((user, i) => (
-            <tr key={i}>
+            <tr key={i} className="rows" id={user.id}>
               <td>
                 <input
                   type="checkbox"
-                  id="check"
+                  id={user.id}
                   className="checkbox"
                   checked={user?.isChecked || false}
                   onChange={handleCheckChanged}
@@ -78,7 +101,12 @@ const UserTable = ({
               <td width="20%">{user.email}</td>
               <td width="20%">{user.role}</td>
               <td>
-                <FiEdit className="edit" onClick={handleEdit} id={user.name} />
+                <FiEdit
+                  className="edit"
+                  onClick={handleEdit}
+                  id={user.name}
+                  email={user.email}
+                />
                 <AiOutlineDelete
                   className="delete"
                   id={user.name}
