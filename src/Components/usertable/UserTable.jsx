@@ -2,12 +2,22 @@ import "./usertable.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 
-const UserTable = ({ users, setUsers, currentUsers }) => {
+const UserTable = ({
+  users,
+  setUsers,
+  currentUsers,
+  indexOfFirstUser,
+  indexOfLastUser,
+}) => {
   const handleCheckChanged = (e) => {
+    let checkBox = document.querySelector("check");
     let { name, checked } = e.target;
     if (name === "all") {
-      let temp = users.map((user) => (user = { ...user, isChecked: checked }));
-      setUsers(temp);
+      let temp = currentUsers.map(
+        (user) => (user = { ...user, isChecked: checked })
+      );
+      users.splice(indexOfFirstUser, indexOfLastUser);
+      setUsers((prev) => [...temp.concat(prev)]);
     } else {
       let temp = users.map((user) =>
         name === user.name ? { ...user, isChecked: checked } : user
@@ -24,6 +34,9 @@ const UserTable = ({ users, setUsers, currentUsers }) => {
     let temp = users.filter((user) => user.name !== e.target.id);
     setUsers(temp);
   }
+  function handleEdit(e) {
+    console.log(e.target.id);
+  }
 
   return (
     <>
@@ -36,7 +49,8 @@ const UserTable = ({ users, setUsers, currentUsers }) => {
                 className="checkbox"
                 name="all"
                 checked={
-                  users.filter((user) => user?.isChecked !== true).length < 1
+                  currentUsers.filter((user) => user?.isChecked !== true)
+                    .length < 1
                 }
                 onChange={handleCheckChanged}
               />
@@ -53,6 +67,7 @@ const UserTable = ({ users, setUsers, currentUsers }) => {
               <td>
                 <input
                   type="checkbox"
+                  id="check"
                   className="checkbox"
                   checked={user?.isChecked || false}
                   onChange={handleCheckChanged}
@@ -63,7 +78,7 @@ const UserTable = ({ users, setUsers, currentUsers }) => {
               <td width="20%">{user.email}</td>
               <td width="20%">{user.role}</td>
               <td>
-                <FiEdit className="edit" />
+                <FiEdit className="edit" onClick={handleEdit} id={user.name} />
                 <AiOutlineDelete
                   className="delete"
                   id={user.name}

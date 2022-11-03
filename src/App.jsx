@@ -8,7 +8,6 @@ function App() {
   const [users, setUsers] = useState([]);
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  // const [currentUsers, setCurrentUsers] = useState([]);
   const [temp, setTemp] = useState([]);
   const [usersPerPage] = useState(10);
 
@@ -42,7 +41,6 @@ function App() {
 
   useEffect(() => {
     fetchData();
-    // setCurrentUsers(temp);
   }, []);
 
   return (
@@ -58,6 +56,8 @@ function App() {
         users={users}
         currentUsers={currentUsers}
         setUsers={setUsers}
+        indexOfFirstUser={indexOfFirstUser}
+        indexOfLastUser={indexOfLastUser}
       />
       <Pagination
         currentUsers={currentUsers}
