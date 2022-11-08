@@ -1,37 +1,28 @@
 import "./usertable.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
+import { useEffect, useState } from "react";
 
-const UserTable = ({
-  users,
-  setUsers,
-  currentUsers,
-  indexOfFirstUser,
-  indexOfLastUser,
-}) => {
+const UserTable = ({ users, setUsers, currentUsers }) => {
+  const [myUsers, setMyUsers] = useState(currentUsers);
+
+  useEffect(() => {
+    setMyUsers(currentUsers);
+  }, [currentUsers, users]);
+
   //control the checkbox
   const handleCheckChanged = (e) => {
-    const rows = document.getElementsByClassName("rows");
-    let { name, checked, id } = e.target;
-    console.log(id);
+    let { name, checked } = e.target;
     if (name === "all") {
-      let temp = currentUsers.map(
+      let temp = myUsers.map(
         (user) => (user = { ...user, isChecked: checked })
       );
-      users.splice(indexOfFirstUser, indexOfLastUser);
-      setUsers((prev) => [...temp.concat(prev)]);
-      for (let v in rows) {
-        if (checked === true) rows[v].classList.add("gray");
-        else rows[v].classList.remove("gray");
-      }
+      setMyUsers(temp);
     } else {
       let temp = users.map((user) =>
         name === user.name ? { ...user, isChecked: checked } : user
       );
       setUsers(temp);
-    }
-    for (let v in rows) {
-      if (id === rows[v].id) rows[v].classList.toggle("gray");
     }
   };
 
@@ -39,12 +30,11 @@ const UserTable = ({
     let temp = users.filter((user) => user?.isChecked !== true);
     setUsers(temp);
   }
-  function handleDelete(e) {
+  function handleBtnDelete(e) {
     let temp = users.filter((user) => user.name !== e.target.id);
     setUsers(temp);
   }
   function handleEdit(e) {
-    console.log(e.target.id);
     let x = prompt("enter the name");
     let y = prompt("enter email");
     let z = prompt("enter role");
@@ -72,8 +62,7 @@ const UserTable = ({
                 className="checkbox"
                 name="all"
                 checked={
-                  currentUsers.filter((user) => user?.isChecked !== true)
-                    .length < 1
+                  myUsers.filter((user) => user?.isChecked !== true).length < 1
                 }
                 onChange={handleCheckChanged}
               />
@@ -85,7 +74,7 @@ const UserTable = ({
           </tr>
         </thead>
         <tbody>
-          {currentUsers.map((user, i) => (
+          {myUsers.map((user, i) => (
             <tr key={i} className="rows" id={user.id}>
               <td>
                 <input
@@ -110,7 +99,7 @@ const UserTable = ({
                 <AiOutlineDelete
                   className="delete"
                   id={user.name}
-                  onClick={handleDelete}
+                  onClick={handleBtnDelete}
                 />
               </td>
             </tr>
