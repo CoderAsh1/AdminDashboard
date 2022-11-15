@@ -3,21 +3,24 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { useEffect, useState } from "react";
 
-const UserTable = ({ users, setUsers, currentUsers }) => {
-  const [myUsers, setMyUsers] = useState(currentUsers);
-
-  useEffect(() => {
-    setMyUsers(currentUsers);
-  }, [currentUsers, users]);
-
+const UserTable = ({
+  users,
+  setUsers,
+  currentUsers,
+  indexOfFirstUser,
+  indexOfLastUser,
+}) => {
   //control the checkbox
   const handleCheckChanged = (e) => {
     let { name, checked } = e.target;
     if (name === "all") {
-      let temp = myUsers.map(
-        (user) => (user = { ...user, isChecked: checked })
+      let temp = users.map((user, index) =>
+        indexOfFirstUser <= index && index < indexOfLastUser
+          ? (user = { ...user, isChecked: checked })
+          : user
       );
-      setMyUsers(temp);
+      console.log(temp);
+      setUsers(temp);
     } else {
       let temp = users.map((user) =>
         name === user.name ? { ...user, isChecked: checked } : user
@@ -62,9 +65,10 @@ const UserTable = ({ users, setUsers, currentUsers }) => {
                 className="checkbox"
                 name="all"
                 checked={
-                  myUsers.filter((user) => user?.isChecked !== true).length < 1
+                  currentUsers.filter((user) => user?.isChecked !== true)
+                    .length < 1
                 }
-                onChange={handleCheckChanged}
+                onChange={(e) => handleCheckChanged(e)}
               />
             </th>
             <th>Name</th>
@@ -74,7 +78,7 @@ const UserTable = ({ users, setUsers, currentUsers }) => {
           </tr>
         </thead>
         <tbody>
-          {myUsers.map((user, i) => (
+          {currentUsers.map((user, i) => (
             <tr key={i} className="rows" id={user.id}>
               <td>
                 <input
